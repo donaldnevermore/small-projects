@@ -1,0 +1,9 @@
+# IDE
+.vscode
+.idea
+.vs
+
+# caches
+**/__pycache__
+**/.mypy_cache
+**/.pytest_cache
