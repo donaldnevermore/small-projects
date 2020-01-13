@@ -6,6 +6,7 @@ authors = ["Dongcheng Wang <1219782000@qq.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+reportlab = "^3.5.32"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"

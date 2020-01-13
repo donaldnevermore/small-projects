@@ -8,15 +8,17 @@ class Rule:
 
 class HeadingRule(Rule):
     """标题最多70字，不以冒号结束"""
-    type = 'heading'
+
+    type = "heading"
 
     def condition(self, block):
-        return '\n' not in block and len(block) <= 70 and block[-1] != ':'
+        return "\n" not in block and len(block) <= 70 and block[-1] != ":"
 
 
 class TitleRule(HeadingRule):
     """题目是第一个块，作为标题"""
-    type = 'title'
+
+    type = "title"
     first = True
 
     def condition(self, block):
@@ -28,10 +30,11 @@ class TitleRule(HeadingRule):
 
 class ListItemRule(Rule):
     """列表以连字符为开始的段落，然后连字符会被删除"""
-    type = 'listitem'
+
+    type = "listitem"
 
     def condition(self, block):
-        return block[0] == '-'
+        return block[0] == "-"
 
     def action(self, block, handler):
         handler.start(self.type)
@@ -42,7 +45,8 @@ class ListItemRule(Rule):
 
 class ListRule(ListItemRule):
     """列表开始于非列表项的块和之后的列表项之间，由最后的连续列表项作为结束"""
-    type = 'list'
+
+    type = "list"
     inside = False
 
     def condition(self, block):
@@ -60,7 +64,8 @@ class ListRule(ListItemRule):
 
 class ParagraphRule(Rule):
     """段落是不符合其他规则的块"""
-    type = 'paragraph'
+
+    type = "paragraph"
 
     def condition(self, block):
         return True

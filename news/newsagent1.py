@@ -1,39 +1,25 @@
 from nntplib import NNTP
-import time
-from datetime import date, datetime
+from datetime import date, timedelta
 
-# # yesterday=localtime(time() - day)
-new_date = datetime(2000, 1, 1)
-# # date=strftime('%y%m%d',yesterday)
-# # hour=strftime('%H%M%S',yesterday)
+today = date.today()
+yesterday = today - timedelta(days=1)
 
-servername = "news.newsfan.net"
-group = "comp.lang.python"
+servername = "news.gmane.io"
+group = "gmane.comp.python.committers"
 server = NNTP(servername)
-# (resp, count, first, last, name)=server.group('comp.lang.python')
-# (resp, subs) = s.xhdr('subject', (str(first)+'-'+str(last)))
-ids = server.newnews(group, new_date)[1]
 
-# for i in ids:
-#     head=server.head(i)[3]
-#     for line in head:
-#         if line.lower().startswith('subject:'):
-#             subject=line[9:]
-#             break
+ids = server.newnews(group, yesterday)[1]
 
-#     body=server.body(i)[3]
+subject = None
+for i in ids:
+    head = server.head(i)[3]
+    for line in head:
+        if line.lower().startswith("subject:"):
+            subject = line[9:]
+            break
 
-#     print(subject)
-#     print('-'*len(subject))
-#     print('\n'.join(body))
+    body = server.body(i)[3]
 
-# from nntplib import *
-# s = NNTP('web.aioe.org')
-# (resp, count, first, last, name) = s.group('comp.lang.python')
-# (resp, subs) = s.xhdr('subject', (str(first)+'-'+str(last)))
-# for subject in subs[-10:]:
-#   print(subject)
-# number = input('Which article do you want to read? ')
-# (reply, num, id, list) = s.body(str(number))
-# for line in list:
-#   print(line)
+    print(subject)
+    print("-" * len(subject))
+    print("\n".join(body))

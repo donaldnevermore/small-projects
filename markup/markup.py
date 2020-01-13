@@ -53,7 +53,8 @@ class BasicTextParser(Parser):
         self.add_filter(r"([\.a-zA-Z]+@[\.a-zA-Z]+[a-zA-Z])", "mail")
 
 
-handler = HTMLRenderer()
-parser = BasicTextParser(handler)
+if __name__ == "__main":
+    handler = HTMLRenderer()
+    parser = BasicTextParser(handler)
 
-parser.parse(sys.stdin)
+    parser.parse(sys.stdin)
