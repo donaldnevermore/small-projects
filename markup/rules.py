@@ -1,4 +1,6 @@
 class Rule:
+    type: str
+
     def action(self, block, handler):
         handler.start(self.type)
         handler.feed(block)
@@ -67,5 +69,6 @@ class ParagraphRule(Rule):
 
     type = "paragraph"
 
-    def condition(self, block):
+    @staticmethod
+    def condition():
         return True

@@ -21,50 +21,66 @@ class Handler:
 
 
 class HTMLRenderer(Handler):
-    def start_document(self):
+    @staticmethod
+    def start_document():
         print("<html><head><title>...</title></head><body>")
 
-    def end_document(self):
+    @staticmethod
+    def end_document():
         print("</body></html>")
 
-    def start_paragraph(self):
+    @staticmethod
+    def start_paragraph():
         print("<p>")
 
-    def end_paragraph(self):
+    @staticmethod
+    def end_paragraph():
         print("</p>")
 
-    def start_heading(self):
+    @staticmethod
+    def start_heading():
         print("<h2>")
 
-    def end_heading(self):
+    @staticmethod
+    def end_heading():
         print("</h2>")
 
-    def start_list(self):
+    @staticmethod
+    def start_list():
         print("<ul>")
 
-    def end_list(self):
+    @staticmethod
+    def end_list():
         print("</ul>")
 
-    def start_listitem(self):
+    @staticmethod
+    def start_listitem():
         print("<li>")
 
-    def end_listitem(self):
+    @staticmethod
+    def end_listitem():
         print("</li>")
 
-    def start_title(self):
+    @staticmethod
+    def start_title():
         print("<h1>")
 
-    def end_title(self):
+    @staticmethod
+    def end_title():
         print("</h1>")
 
-    def sub_emphasis(self, match):
+    @staticmethod
+    def sub_emphasis(match):
         return "<em>{}</em>".format(match.group(1))
 
-    def sub_url(self, match):
+    @staticmethod
+    def sub_url(match):
         return '<a href="{}">{}</a>'.format(match.group(1), match.group(1))
 
-    def sub_mail(self, match):
+    @staticmethod
+    def sub_mail(match):
         return '<a href="mailto:{}">{}</a>'.format(match.group(1), match.group(1))
 
-    def feed(self, data):
+    @staticmethod
+    def feed(data):
         print(data)

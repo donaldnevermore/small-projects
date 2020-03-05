@@ -8,6 +8,8 @@ servername = "news.gmane.io"
 group = "gmane.comp.python.committers"
 server = NNTP(servername)
 
+# see https://docs.python.org/3/library/nntplib.html
+# This command is frequently disabled by NNTP server administrators.
 ids = server.newnews(group, yesterday)[1]
 
 subject = None
