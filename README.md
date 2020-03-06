@@ -30,3 +30,4 @@ poetry run python your_name.py
 2. reportlab 画幅好画
 3. 万能的XML
 4. news 新闻聚合
+5. chatserver 虚拟茶话会
