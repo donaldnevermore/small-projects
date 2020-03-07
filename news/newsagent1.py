@@ -1,27 +1,23 @@
 from nntplib import NNTP
-from datetime import date, timedelta
 
-today = date.today()
-yesterday = today - timedelta(days=1)
-
-servername = "news.gmane.io"
-group = "gmane.comp.python.committers"
+servername = "news.foo.bar"
+group = "comp.lang.python.announce"
 server = NNTP(servername)
+howmany = 10
 
-# see https://docs.python.org/3/library/nntplib.html
-# This command is frequently disabled by NNTP server administrators.
-ids = server.newnews(group, yesterday)[1]
+resp, count, first, last, name = server.group(group)
 
-subject = None
-for i in ids:
-    head = server.head(i)[3]
-    for line in head:
-        if line.lower().startswith("subject:"):
-            subject = line[9:]
-            break
+start = last - howmany + 1
 
-    body = server.body(i)[3]
+resp, overviews = server.over((start, last))
 
+for id, over in overviews:
+    subject = over["subject"]
+    resp, info = server.body(id)
     print(subject)
     print("-" * len(subject))
-    print("\n".join(body))
+    for line in info.lines:
+        print(line.decode("latin1"))
+    print()
+
+server.quit()

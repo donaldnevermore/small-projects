@@ -1,16 +1,7 @@
-from nntplib import NNTP
-from datetime import date, timedelta
-from email import message_from_string
+from nntplib import NNTP, decode_header
 from urllib.request import urlopen
 import textwrap
 import re
-
-
-def wrap(string, max=70):
-    """
-    将字符串调整为最大行宽
-    """
-    return "\n".join(textwrap.wrap(string)) + "\n"
 
 
 class NewsAgent:
@@ -54,31 +45,22 @@ class NNTPSource:
     从NNTP组获取新闻项目的新闻来源
     """
 
-    def __init__(self, servername, group, window):
+    def __init__(self, servername, group, howmany):
         self.servername = servername
         self.group = group
-        self.window = window
+        self.howmany = howmany
 
     def get_items(self):
-        today = date.today()
-        yesterday = today - timedelta(days=1)
         server = NNTP(self.servername)
-
-        # see https://docs.python.org/3/library/nntplib.html
-        # This command is frequently disabled by NNTP server administrators.
-        ids = server.newnews(self.group, yesterday)[1]
-
-        for id in ids:
-            lines = server.article(id)[3]
-            message = message_from_string("\n".join(lines))
-
-            title = message["subject"]
-            body = message.get_payload()
-            if message.is_multipart():
-                body = body[0]
-
+        resp, count, first, last, name = server.group(self.group)
+        start = last - self.howmany + 1
+        resp, overviews = server.over((start, last))
+        for id, over in overviews:
+            title = decode_header(over["subject"])
+            resp, info = server.body(id)
+            body = "\n".join(line.decode("latin")
+                             for line in info.lines) + "\n\n"
             yield NewsItem(title, body)
-
         server.quit()
 
 
@@ -87,17 +69,18 @@ class SimpleWebSource:
     使用正则表达式从网页中提取新闻项目的新闻来源
     """
 
-    def __init__(self, url, title_pattern, body_pattern):
+    def __init__(self, url, title_pattern, body_pattern, encoding="utf8"):
         self.url = url
         self.title_pattern = re.compile(title_pattern)
         self.body_pattern = re.compile(body_pattern)
+        self.encoding = encoding
 
     def get_items(self):
-        text = urlopen(self.url).read()
+        text = urlopen(self.url).read().decode(self.encoding)
         titles = self.title_pattern.findall(text)
         bodies = self.body_pattern.findall(text)
         for title, body in zip(titles, bodies):
-            yield NewsItem(title, wrap(body))
+            yield NewsItem(title, textwrap.fill(body) + "\n")
 
 
 class PlainDestination:
@@ -123,46 +106,59 @@ class HTMLDestination:
 
     def receive_items(self, items):
         out = open(self.filename, "w")
-        print(out, """
+        print("""
         <html>
-            <head>
-                <title>Today's News</title>
-            </head>
-            <body>
-            <h1>Today's News</h1>
-        """)
-        print(out, "<ul>")
+          <head>
+            <title>Today"s News</title>
+          </head>
+          <body>
+          <h1>Today"s News</h1>
+        """, file=out)
+
+        print("<ul>", file=out)
         id = 0
         for item in items:
             id += 1
-            print(out, f"""<li><a href="#{id}">{item.title}</a></li>""")
-        print(out, "</ul>")
+            print(f"""  <li><a href="#{id}">{item.title}</a></li>""", file=out)
+        print("</ul>", file=out)
+
+        id = 0
+        for item in items:
+            id += 1
+            print(f"""<h2><a name="{id}">{item.title}</a></h2>""", file=out)
+            print(f"<pre>{item.body}</pre>", file=out)
+
+        print("""
+          </body>
+        </html>
+        """, file=out)
 
 
 def run_default_setup():
     """
     来源和目标的默认设置，可以自己修改
     """
-
     agent = NewsAgent()
 
     # 从BBS新闻站获取新闻的SimpleWebSource
-    bbc_url = "http://news.bbc.co.uk/text_only.stm"
-    bbc_title = r"""(?s)a href="[^"]*">\s*<b>\s*(.*?)\s*</b>"""
-    bbc_body = r"(?s)</a>\s*<br />\s*(.*?)\s*<"
-    bbc = SimpleWebSource(bbc_url, bbc_title, bbc_body)
+    reuters_url = "http://www.reuters.com/news/world"
+    reuters_title = r"""<h2><a href="[^"]*"\s*>(.*?)</a>"""
+    reuters_body = r"</h2><p>(.*?)</p>"
+    reuters = SimpleWebSource(reuters_url, reuters_title, reuters_body)
 
-    agent.add_source(bbc)
+    agent.add_source(reuters)
 
     # 获取新闻的NNTPSource
-    servername = "news.gmane.io"
-    group = "gmane.comp.python.committers"
-    window = 1
-    server = NNTPSource(servername, group, window)
+    clpa_server = "news.ntnu.no"
+    clpa_group = "comp.lang.python.announce"
+    clpa_howmany = 10
+    clpa = NNTPSource(clpa_server, clpa_group, clpa_howmany)
 
-    agent.add_source(server)
+    agent.add_source(clpa)
+
     agent.add_destination(PlainDestination())
     agent.add_destination(HTMLDestination("news.html"))
+
     agent.distribute()
 
 

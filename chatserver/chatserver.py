@@ -67,7 +67,7 @@ class LoginRoom(Room):
     """
 
     def add(self, session):
-        Room.add(self, session)
+        super().add(session)
         self.broadcast(f"Welcome to {self.server.name}\r\n")
 
     @staticmethod
@@ -82,7 +82,6 @@ class LoginRoom(Room):
             session.push(f"The name \"{name}\" is taken.\r\n")
             session.push("Please try again.\r\n")
         else:
-            session.name = name
             session.enter(self.server.main_room)
 
 
@@ -94,11 +93,14 @@ class ChatRoom(Room):
     def add(self, session):
         self.broadcast(session.name + " has entered the room.\r\n")
         self.server.users[session.name] = session
-        Room.add(self, session)
+        super().add(session)
 
     def remove(self, session):
-        Room.remove(self, session)
-        self.broadcast(session.name + " has left the room.")
+        super().remove(session)
+        self.broadcast(session.name + " has left the room.\r\n")
+
+    def do_say(self, session, line):
+        self.broadcast(session.name + ": " + line + "\r\n")
 
     def do_look(self, session, line):
         session.push("The following are in this room:\r\n")
@@ -106,7 +108,7 @@ class ChatRoom(Room):
             session.push(other.name + "\r\n")
 
     def do_who(self, session, line):
-        session.push("The following are logged in.\r\n")
+        session.push("The following are logged in:\r\n")
         for name in self.server.users:
             session.push(name + "\r\n")
 
@@ -129,7 +131,7 @@ class ChatSession(async_chat):
     """
 
     def __init__(self, server, sock):
-        async_chat.__init__(self, sock)
+        super().__init__(sock)
         self.server = server
         self.set_terminator("\r\n")
         self.data = []
@@ -144,7 +146,6 @@ class ChatSession(async_chat):
             ...
         else:
             cur.remove(self)
-
         self.room = room
         room.add(self)
 
@@ -160,7 +161,7 @@ class ChatSession(async_chat):
             self.handle_close()
 
     def handle_close(self):
-        async_chat.handle_close(self)
+        super().handle_close()
         self.enter(LogoutRoom(self.server))
 
 
@@ -169,8 +170,8 @@ class ChatServer(dispatcher):
     只有一个房间的聊天服务器
     """
 
-    def __int__(self, port, name):
-        dispatcher.__init__(self)
+    def __init__(self, port, name):
+        super().__init__()
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.set_reuse_addr()
         self.bind(("", port))
