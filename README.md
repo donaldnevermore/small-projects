@@ -31,3 +31,4 @@ poetry run python your_name.py
 3. 万能的XML
 4. news 新闻聚合
 5. chatserver 虚拟茶话会
+6. edit 使用cgi远程编辑
