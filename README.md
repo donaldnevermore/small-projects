@@ -32,3 +32,4 @@ poetry run python your_name.py
 4. news 新闻聚合
 5. chatserver 虚拟茶话会
 6. edit 使用cgi远程编辑
+7. bulletin_board 自建公告板
