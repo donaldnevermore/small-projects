@@ -33,3 +33,6 @@ poetry run python your_name.py
 5. chatserver 虚拟茶话会
 6. edit 使用cgi远程编辑
 7. bulletin_board 自建公告板
+8. xml_rpc 使XML-RPC共享文件
+9. gui 使用GUI共享文件
+10. game 自制街机游戏
