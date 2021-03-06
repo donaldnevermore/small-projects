@@ -1,7 +1,3 @@
-"""文本块生成器"""
-__revision__ = "0.1"
-
-
 def lines(file):
     for line in file:
         yield line
@@ -15,4 +11,5 @@ def blocks(file):
             block.append(line)
         elif block:
             yield "".join(block).strip()
+
             block = []
