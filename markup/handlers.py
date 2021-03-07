@@ -15,12 +15,13 @@ class Handler:
             result = self.callback("sub_", name, match)
             if result is None:
                 result = match.group(0)
+
             return result
 
         return substitution
 
 
-class HTMLRenderer(Handler):
+class HtmlRenderer(Handler):
     @staticmethod
     def start_document():
         print("<html><head><title>...</title></head><body>")
@@ -71,7 +72,7 @@ class HTMLRenderer(Handler):
 
     @staticmethod
     def sub_emphasis(match):
-        return "<em>{}</em>".format(match.group(1))
+        return f"<em>{match.group(1)}</em>"
 
     @staticmethod
     def sub_url(match):

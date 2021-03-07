@@ -1,15 +1,11 @@
 import sys
 import re
-from handlers import *
-from util import *
-from rules import *
+from handlers import HtmlHandler, Handler
+from util import blocks
+from rules import ListRule, ListItemRule, TitleRule, HeadingRule, ParagraphRule
 
 
 class Parser:
-    """
-    分析器读取文本，应用解析规则，控制处理器
-    """
-
     def __init__(self, handler):
         self.handler = handler
         self.rules = []
@@ -26,6 +22,7 @@ class Parser:
 
     def parse(self, file):
         self.handler.start("document")
+
         for block in blocks(file):
             for filter in self.filters:
                 block = filter(block, self.handler)
@@ -34,12 +31,11 @@ class Parser:
                     last = rule.action(block, self.handler)
                     if last:
                         break
+
         self.handler.end("document")
 
 
 class BasicTextParser(Parser):
-    """在构造函数中增加规则和过滤器的具体语法"""
-
     def __init__(self, handler):
         Parser.__init__(self, handler)
         self.add_rule(ListRule())
@@ -53,8 +49,8 @@ class BasicTextParser(Parser):
         self.add_filter(r"([\.a-zA-Z]+@[\.a-zA-Z]+[a-zA-Z])", "mail")
 
 
-if __name__ == "__main":
-    handler = HTMLRenderer()
+if __name__ == "__main__":
+    handler = HtmlHandler()
     parser = BasicTextParser(handler)
 
     parser.parse(sys.stdin)
