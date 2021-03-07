@@ -1,16 +1,19 @@
-from urllib.request import urlopen
-from reportlab.graphics.shapes import *
+# from urllib.request import urlopen
+from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics.charts.lineplots import LinePlot
+from reportlab.lib import colors
 from reportlab.graphics import renderPDF
 
-URL = "http://services.swpc.noaa.gov/text/predicted-sunspot-radio-flux.txt"
+# No longer available
+# URL = "ftp://ftp.swpc.noaa.gov/pub/weekly/Predict.txt"
+
 COMMENT_CHARS = "#:"
 
 drawing = Drawing(400, 200)
 data = []
 
-for line in urlopen(URL).readlines():
-    line = str(line, encoding="utf-8")
+for line in open("Predict.txt", "r").readlines():
+    # line = line.decode()
     if not line.isspace() and line[0] not in COMMENT_CHARS:
         data.append([float(n) for n in line.split()])
 
