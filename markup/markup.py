@@ -1,6 +1,6 @@
 import sys
 import re
-from handlers import HtmlHandler, Handler
+from handlers import HtmlRenderer
 from util import blocks
 from rules import ListRule, ListItemRule, TitleRule, HeadingRule, ParagraphRule
 
@@ -50,7 +50,7 @@ class BasicTextParser(Parser):
 
 
 if __name__ == "__main__":
-    handler = HtmlHandler()
+    handler = HtmlRenderer()
     parser = BasicTextParser(handler)
 
     parser.parse(sys.stdin)
