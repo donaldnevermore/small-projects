@@ -34,4 +34,4 @@ class PageMaker(ContentHandler):
 
 
 if __name__ == "__main__":
-    parse("./website.xml", PageMaker())
+    parse("website.xml", PageMaker())

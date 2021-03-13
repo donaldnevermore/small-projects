@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 from xml.sax.handler import ContentHandler
 from xml.sax import parse
 
@@ -31,7 +31,7 @@ class HeadlineHandler(ContentHandler):
 
 if __name__ == "__main__":
     headlines = []
-    parse("./website.xml", HeadlineHandler(headlines))
+    parse("website.xml", HeadlineHandler(headlines))
     print("The following <h1> elements were found:")
     for h in headlines:
         print(h)
