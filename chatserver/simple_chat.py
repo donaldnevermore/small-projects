@@ -56,7 +56,7 @@ class ChatServer(dispatcher):
 
     def broadcast(self, line):
         for session in self.sessions:
-            session.push(line + "\r\n")
+            session.push(f"{line}\r\n".encode())
 
     def handle_accept(self):
         conn, addr = self.accept()
