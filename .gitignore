@@ -1,4 +1,5 @@
 pdm.lock
+*.pdf
 
 # IDEs
 .vscode/
