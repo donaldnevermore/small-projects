@@ -1,5 +1,6 @@
 pdm.lock
 *.pdf
+__pypackages__/
 
 # IDEs
 .vscode/
