@@ -1,17 +1,19 @@
-[tool.poetry]
-name = "small-projects"
-version = "0.1.0"
+[project]
+name = ""
+version = ""
 description = ""
-authors = ["Donald33 Wang <dongcheng6@qq.com>"]
-
-[tool.poetry.dependencies]
-python = "^3.9"
-reportlab = "^3.5.63"
-
-[tool.poetry.dev-dependencies]
-black = "^20.8b1"
-pytest = "^6.2.2"
+authors = [
+    {name = "Donald33 D. Nevermore", email = "donald33wang@gmail.com"},
+]
+dependencies = [
+    "reportlab>=3.6.11",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool]
+[tool.pdm]

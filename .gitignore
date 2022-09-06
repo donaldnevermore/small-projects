@@ -1,3 +1,5 @@
+pdm.lock
+
 # IDEs
 .vscode/
 .idea/
