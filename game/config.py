@@ -1,9 +1,7 @@
 # Configuration file for Squish
-# -----------------------------
 
-# Feel free to modify the configuration variables below to taste.
-# If the game is too fast or too slow, try to modify the speed
-# variables.
+# Feel free to modify the configuration variables below.
+# If the game is too fast or too slow, try to modify the speed.
 
 # Change these to use other images in the game:
 banana_image = 'banana.png'

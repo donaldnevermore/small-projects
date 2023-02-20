@@ -2,7 +2,7 @@ import os, sys, pygame
 from pygame.locals import *
 import objects, config
 
-"This module contains the main game logic of the Squish game."
+"""This module contains the main game logic of the Squish game."""
 
 
 class State:

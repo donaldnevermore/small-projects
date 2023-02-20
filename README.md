@@ -4,4 +4,4 @@
 
 ## Tips
 
-You need to install Python 3.10+ and `pdm` for package management.
+You need Python 3.11+ and `pdm` for package management.

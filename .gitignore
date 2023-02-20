@@ -1,14 +1,14 @@
-pdm.lock
-*.pdf
-__pypackages__/
+.pdm.toml
+/__pypackages__
+**/*.pdf
 
 # IDEs
-.vscode/
-.idea/
-.vs/
+/.vscode
+/.idea
+/.vs
 
 # Caches
-**/__pycache__/
-**/.mypy_cache/
-**/.pytest_cache/
-**/.ipynb_checkpoints/
+**/__pycache__
+/.mypy_cache
+/.pytest_cache
+/.ipynb_checkpoints
