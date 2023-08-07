@@ -1,14 +1,16 @@
-.pdm.toml
-/__pypackages__
+# IDEs
+.vscode/
+.idea/
+.vs/
+
+.pdm-python
+.venv/
+/*.egg-info
+
 **/*.pdf
 
-# IDEs
-/.vscode
-/.idea
-/.vs
-
 # Caches
-**/__pycache__
-/.mypy_cache
-/.pytest_cache
-/.ipynb_checkpoints
+**/__pycache__/
+**/.mypy_cache/
+**/.pytest_cache/
+**/.ipynb_checkpoints/
